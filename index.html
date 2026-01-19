@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ArkDesk — Tickets In. Fixes Out.</title>
+  <meta name="description" content="ArkDesk turns EV charging support tickets into category, severity, technician steps, driver messages, and routing tags in seconds." />
+
+  <!-- Social preview -->
+  <meta property="og:title" content="ArkDesk — Tickets In. Fixes Out." />
+  <meta property="og:description" content="EV charging support & diagnostics automation. Triage → Fix steps → Driver response → Routing tags." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg:#070f1f;
+      --bg2:#050b17;
+      --card:rgba(255,255,255,.04);
+      --card2:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.10);
+
+      --text:#eaf1ff;
+      --muted:#b7c6ea;
+
+      --a:#66a6ff;
+      --b:#7cffd1;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+      --max: 1120px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(850px 520px at 15% 5%, rgba(102,166,255,.22), transparent 55%),
+        radial-gradient(850px 520px at 85% 20%, rgba(124,255,209,.16), transparent 58%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      line-height:1.55;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:14px 0;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:900; letter-spacing:.2px;
+    }
+
+    /* Replace this gradient logo with your real icon later if you want */
+    .logoMark{
+      width:38px; height:38px; border-radius:14px;
+      background: linear-gradient(135deg, var(--a), var(--b));
+      box-shadow: 0 18px 40px rgba(102,166,255,.22);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .navActions{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .btn{
+      text-decoration:none;
+      border-radius:14px;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      font-weight:800;
+      font-size:14px;
+    }
+    .btnPrimary{
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(135deg, var(--a), var(--b));
+      color:#021023;
+      box-shadow: 0 16px 40px rgba(124,255,209,.14);
+    }
+
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+      align-items:stretch;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns:1fr}
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:26px;
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border-radius:999px;
+      padding:8px 12px;
+      background: rgba(124,255,209,.11);
+      border:1px solid rgba(124,255,209,.22);
+      font-weight:900;
+      font-size:14px;
+      margin-bottom:14px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(30px, 4.2vw, 52px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:10px 0 18px;
+      color:var(--muted);
+      max-width: 62ch;
+      font-size: 16px;
+    }
+
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
+    .cta{
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:16px;
+      padding:12px 16px;
+      font-weight:900;
+      text-decoration:none;
+      border:1px solid transparent;
+    }
+    .ctaPrimary{
+      background: linear-gradient(135deg, var(--a), var(--b));
+      color:#021023;
+      box-shadow: 0 16px 40px rgba(124,255,209,.14);
+    }
+    .ctaGhost{
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+    }
+    .note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .miniGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){
+      .miniGrid{grid-template-columns:1fr}
+    }
+    .tile{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .tile b{display:block; margin-bottom:6px}
+    .tile p{margin:0; color:var(--muted); font-size:14px}
+
+    .section{
+      margin-top:16px;
+    }
+    .sectionTitle{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.01em;
+    }
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .twoCol{grid-template-columns:1fr}
+    }
+
+    .exampleBox{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:14px;
+    }
+    .label{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    pre{
+      margin:10px 0 0;
+      white-space: pre-wrap;
+      color:#dbe7ff;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .pricing{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .pricing{grid-template-columns:1fr}
+    }
+    .priceCard{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding:16px;
+      position:relative;
+    }
+    .badge{
+      position:absolute;
+      top:12px; right:12px;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid rgba(124,255,209,.22);
+      background: rgba(124,255,209,.10);
+    }
+    .priceCard h3{margin:0 0 6px}
+    .price{
+      font-size:26px;
+      font-weight:950;
+      margin:4px 0 10px;
+    }
+    .price small{color:var(--muted); font-weight:700}
+    .list{
+      margin:0; padding-left:18px; color:var(--muted); font-size:14px;
+    }
+    .list li{margin:6px 0}
+
+    form{
+      display:grid; gap:10px;
+      margin-top:12px;
+    }
+    input, textarea, select{
+      padding:12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      outline:none;
+      font-size: 14px;
+    }
+    textarea{min-height: 92px; resize: vertical}
+    .submit{
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid transparent;
+      background: linear-gradient(135deg, var(--a), var(--b));
+      color:#021023;
+      font-weight:950;
+      font-size:15px;
+      box-shadow: 0 16px 40px rgba(124,255,209,.12);
+    }
+
+    .footer{
+      margin:22px 0 10px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      opacity:.95;
+    }
+    .divider{
+      height:1px; width:100%;
+      background: rgba(255,255,255,.08);
+      margin:14px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logoMark" aria-hidden="true"></div>
+        <div>ArkDesk</div>
+      </div>
+
+      <div class="navActions">
+        <a class="btn" href="#examples">Example Output</a>
+        <a class="btn btnPrimary" href="#pilot">Request a Pilot</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="heroGrid">
+      <div class="panel">
+        <div class="pill">⚡ Tickets In. Fixes Out.</div>
+        <h1>EV Charging Support & Diagnostics — Automated</h1>
+        <p class="sub">
+          ArkDesk turns messy support tickets into <b>issue category + severity</b>,
+          <b>technician action steps</b>, <b>driver-ready messages</b>, and <b>routing tags</b> in seconds.
+        </p>
+
+        <div class="ctaRow">
+          <a class="cta ctaPrimary" href="#pilot">Request a 30-Day Pilot</a>
+          <a class="cta ctaGhost" href="#examples">See Example Output</a>
+        </div>
+
+        <div class="note">
+          Start with 20–50 sample tickets (CSV or Google Sheet). No heavy setup.
+        </div>
+
+        <div class="miniGrid">
+          <div class="tile">
+            <b>Instant Triage</b>
+            <p>Category + severity so the right team acts fast.</p>
+          </div>
+          <div class="tile">
+            <b>Technician Steps</b>
+            <p>Step-by-step actions for faster resolution.</p>
+          </div>
+          <div class="tile">
+            <b>Driver Messaging</b>
+            <p>Calm, professional responses that reduce escalations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILOT FORM -->
+      <div class="panel" id="pilot">
+        <h2 class="sectionTitle">30-Day Pilot</h2>
+        <p class="sub" style="margin:6px 0 0">
+          Send <b>20–50</b> recent tickets and ArkDesk returns structured outputs for review.
+        </p>
+
+        <!-- ✅ Form endpoint goes here -->
+        <!-- Replace YOUR_FORM_ID with your Formspree ID -->
+        <form id="pilotForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <input name="name" placeholder="Full name" required />
+          <input name="email" type="email" placeholder="Work email" required />
+          <input name="company" placeholder="Company" required />
+
+          <select name="tickets_per_week" required>
+            <option value="" disabled selected>Avg support tickets / week</option>
+            <option>1–25</option>
+            <option>26–100</option>
+            <option>101–300</option>
+            <option>300+</option>
+          </select>
+
+          <select name="preferred_format" required>
+            <option value="" disabled selected>Preferred format for sample tickets</option>
+            <option>CSV Export</option>
+            <option>Google Sheet</option>
+            <option>Either works</option>
+          </select>
+
+          <textarea name="pain" placeholder="Biggest support pain right now (optional)"></textarea>
+
+          <button class="submit" type="submit">Request Pilot Review</button>
+          <div id="formMsg" class="note"></div>
+        </form>
+
+        <div class="divider"></div>
+
+        <div class="note">
+          Contact: <b>Andrew</b><br/>
+          ✉️ <b>simpletechma@gmail.com</b><br/>
+          📞 <b>857-869-8585</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLES -->
+    <div class="section panel" id="examples">
+      <h2 class="sectionTitle">Example Output (Before → After)</h2>
+
+      <div class="twoCol">
+        <div class="exampleBox">
+          <div class="label">Before</div>
+          <pre>“Charger stopped after 2 minutes. App said declined. Tried twice. Need refund.”</pre>
+        </div>
+
+        <div class="exampleBox">
+          <div class="label">After</div>
+          <pre>Category: Authorization / Backend
+Severity: Medium
+Route: Billing/Auth
+
+Tech actions:
+1) Check OCPP auth logs + timeouts
+2) Confirm tariff/pricing config
+3) Remote reboot comms module
+4) Monitor next sessions
+
+Driver message:
+“Thanks for reporting this — your session stopped because authorization timed out. Please try again. You won’t be charged for an unsuccessful session.”</pre>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div class="twoCol">
+        <div class="exampleBox">
+          <div class="label">Before</div>
+          <pre>“Plug won’t click in. Charger says available but it won’t start.”</pre>
+        </div>
+
+        <div class="exampleBox">
+          <div class="label">After</div>
+          <pre>Category: Hardware / Connector
+Severity: Medium
+Route: Field Tech
+
+Tech actions:
+1) Inspect latch + retention mechanism
+2) Check pins for damage/debris
+3) Test with known-good vehicle/test rig
+4) If repeated → schedule connector replacement
+
+Driver message:
+“Sorry about that — it looks like the connector isn’t seating fully. Please reseat firmly or try the other connector. We’re scheduling a repair if it continues.”</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="section panel" id="pricing">
+      <h2 class="sectionTitle">Pilot Packages</h2>
+      <p class="sub" style="margin-top:6px">
+        Simple flat-fee pilot options. Most teams start with Pro.
+      </p>
+
+      <div class="pricing">
+        <div class="priceCard">
+          <h3>Starter</h3>
+          <div class="price">$750 <small>/ 30 days</small></div>
+          <ul class="list">
+            <li>Up to <b>300</b> tickets processed</li>
+            <li>Standard categories + routing</li>
+            <li>Weekly summary report</li>
+          </ul>
+        </div>
+
+        <div class="priceCard">
+          <div class="badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price">$1,500 <small>/ 30 days</small></div>
+          <ul class="list">
+            <li>Up to <b>1,000</b> tickets processed</li>
+            <li>Custom routing tags + categories</li>
+            <li>Weekly trends + repeat-failure insights</li>
+            <li>Priority improvements during pilot</li>
+          </ul>
+        </div>
+
+        <div class="priceCard">
+          <h3>Enterprise</h3>
+          <div class="price">$3,000 <small>/ 30 days</small></div>
+          <ul class="list">
+            <li>Up to <b>3,000</b> tickets processed</li>
+            <li>Multi-site calibration</li>
+            <li>Team onboarding + playbook guidance</li>
+            <li>Executive summary + scale plan</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>© <span id="year"></span> ArkDesk</div>
+      <div>Tickets In. Fixes Out.</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // If you forget to set Formspree ID, show a clear message
+    const form = document.getElementById("pilotForm");
+    const msg = document.getElementById("formMsg");
+    if (form.action.includes("YOUR_FORM_ID")) {
+      msg.textContent = "⚠️ Replace YOUR_FORM_ID in the form action with your Formspree link.";
+    }
+  </script>
+</body>
+</html>
