@@ -487,16 +487,6 @@ Driver message:
     </div>
   </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // If you forget to set Formspree ID, show a clear message
-    const form = document.getElementById("pilotForm");
-    const msg = document.getElementById("formMsg");
-    if (form.action.includes("YOUR_FORM_ID")) {
-      msg.textContent = "⚠️ Replace YOUR_FORM_ID in the form action with your Formspree link.";
-    }
-  </script>
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 
